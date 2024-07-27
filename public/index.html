@@ -22,11 +22,12 @@
         <!-- <div class="box" id="box-7">Discover</div> -->
         <div class="box" id="box-8">DoS</div>
         <div class="box" id="box-9">Log Flood</div>
+        <div class="box" id="box-10">Ongoing</div>
         <dialog id="dialog-1">
             <h3>Stress the Pod resources.</h3>
-            <input type="number" min="1" placeholder="cores (Default: all)">
-            <input type="number" min="2" placeholder="duration (seconds)">
-            <button type="submit">Stress</button>
+            <input type="number" min="1" placeholder="cores (Default: all)" id="cores">
+            <input type="number" min="2" placeholder="duration (seconds)" id="stress-duration">
+            <button type="submit" onclick="stress()">Stress</button>
         </dialog>
         <dialog id="dialog-2">
             <h3>Change Health Status of Pod</h3>
@@ -96,51 +97,53 @@
                 <option value="510">510 Not Extended</option>
 
             </select>
-            <button type="submit">Set Health</button>
+            <button type="submit" onclick="setHealth()">Set Health</button>
         </dialog>
         <dialog id="dialog-3">
             <h3>Warning Freezing the pod will cause unresponsive behaviour.</h3>
             <h5>Choose a small duration time.</h5>
-            <input type="number" min="2" placeholder="duration (seconds)">
-            <button type="submit">Freeze</button>
+            <input type="number" min="2" placeholder="duration (seconds)" id="freeze-duration">
+            <button type="submit" onclick="freeze()">Freeze</button>
         </dialog>
         <dialog id="dialog-4">
             <h3>Shutdown the Pod</h3>
-            <input type="number" placeholder="Shutdown after (seconds)" min="0">
-            <button type="submit">Shutdown</button>
+            <input type="number" placeholder="Shutdown after (seconds)" min="0" id="shutdown-duration">
+            <button type="submit" onclick="shutdown()">Shutdown</button>
         </dialog>
         <dialog id="dialog-5">
             <h3>Write some message to next pod.</h3>
-            <input type="text" placeholder="directory (Default: /tmp)">
-            <button type="submit">Write</button>
+            <input type="text" placeholder="directory (Default: /tmp)" id="write-directory">
+            <button type="submit" onclick="writeMessage()">Write</button>
         </dialog>
         <dialog id="dialog-6">
             <h3>Read message from previous pod.</h3>
-            <input type="text" placeholder="directory (Default: /tmp)">
-            <button type="submit">Read</button>
+            <input type="text" placeholder="directory (Default: /tmp)" id="read-directory">
+            <button type="submit" onclick="readMessage()">Read</button>
         </dialog>
         <dialog id="dialog-7">
             <h3>Discover other pods like this.</h3>
             <input type="text" placeholder="url (LB/service/localhost)">
             <input type="number" min="5" placeholder="duration (seconds)">
-            <button type="submit">Discover</button>
+            <button type="submit" onclick="">Discover</button>
         </dialog>
         <dialog id="dialog-8">
             <h3>Flood the pod(s) by sending concurrent requests.</h3>
-            <input type="text" placeholder="url (Default: localhost)">
-            <button type="submit">Start</button>
+            <!-- <input type="text" placeholder="url (Default: localhost)"> -->
+            <input type="number" min="2" placeholder="duration (seconds)" id="dos-duration">
+            <button type="submit" onclick="dos()">Start</button>
         </dialog>
         <dialog id="dialog-9">
             <h3>Flood the pod(s) by generating Logs.</h3>
-            <select name="status" id="status">
+            <select name="log-status" id="log-status">
                 <option value="" disabled selected>Select a Log Level (Default: Random) </option>
-                <option value="log">Log</option>
-                <option value="debug">Debug</option>
-                <option value="warn">Warn</option>
-                <option value="error">Error</option>
+                <option value="1">Log</option>
+                <option value="2">Debug</option>
+                <option value="3">Warn</option>
+                <option value="4">Error</option>
                 <option value="">Random</option>
             </select>
-            <button type="submit">Start</button>
+            <input type="number" min="2" placeholder="duration (seconds)" id="log-duration">
+            <button type="submit" onclick="logFlood()">Start</button>
         </dialog>
     </div>
     <script src="./script.js"></script>

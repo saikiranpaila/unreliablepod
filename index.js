@@ -39,7 +39,8 @@ app.get('/name', (req, res) => {
 
 app.post('/freeze', (req, res) => {
     const data = req.body;
-    const duration = Date.now() + data.till * 1000;
+    const duration = Date.now() + (data.duration * 1000 || 10000);
+    console.log('freezed')
     res.send('freezed!');
     while (Date.now() < duration) { }
 });
@@ -86,12 +87,13 @@ app.post('/write', (req, res) => {
     } else {
         data = prefix + `: Hi I'm ${app_name}!\n`;
     }
+    let path = req.body.path;
     try {
         // Write data to a file named 'example.txt'
         if (req.body.rewrite) {
-            fs.writeFileSync('/tmp/example.txt', data, 'utf8');
+            fs.writeFileSync(`${path}/message.txt`, data, 'utf8');
         } else {
-            fs.appendFileSync('/tmp/example.txt', data, 'utf-8');
+            fs.appendFileSync(`${path}/message.txt`, data, 'utf-8');
         }
         console.log('File has been written successfully.');
     } catch (err) {
@@ -101,9 +103,11 @@ app.post('/write', (req, res) => {
 });
 
 app.get('/read', (req, res) => {
+    let path = req.query.path;
     try {
         // Synchronous file read
-        const data = fs.readFileSync('/tmp/example.txt', 'utf8');
+        const data = fs.readFileSync(`${path}/message.txt`, 'utf8');
+        console.log('file read')
         res.send(data)
     } catch (err) {
         console.error('Error reading file:', err);
@@ -127,9 +131,10 @@ app.get('/hunter', (req, res) => {
 
 });
 
-app.get('/concurrent', async (req, res) => {
+app.post('/concurrent', async (req, res) => {
     const duration = Date.now() + (req.body.duration * 1000 || 10000);
     const url = req.body.url || `https://localhost:${port}/`;
+    console.log('hitting')
     res.send('hitting...');
     while (Date.now() < duration) {
         axios.get(url).catch(error => { });
@@ -143,10 +148,11 @@ function getRandomInt(min, max) {
 
 app.post('/logs', (req, res) => {
     const duration = Date.now() + req.body.duration * 1000 || 10000;
+    console.log(req.body.level)
     res.send('logging...')
     while (Date.now() < duration) {
         const randomInt = req.body.level || getRandomInt(1, 4);
-        switch (randomInt) {
+        switch (parseInt(randomInt)) {
             case 1:
                 console.log(Date.now() + ' ' + faker.lorem.sentence());
                 break;
