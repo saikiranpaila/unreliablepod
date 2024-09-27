@@ -92,13 +92,13 @@ function freeze() {
 }
 
 function shutdown() {
-    let duration = document.getElementById('shutdown-duration');
+    let after = document.getElementById('shutdown-after').value;
     fetch('/close', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ duration: duration })
+        body: JSON.stringify({ after: after })
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
