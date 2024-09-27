@@ -25,12 +25,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-    res.status(status).send({ name: app_name, status: status })
+    res.status(parseInt(status)).send({ name: app_name, status: status })
 });
 
 app.post('/health', (req, res) => {
     status = req.body.status || status;
-    res.status(status).send({ name: app_name, status: status })
+    res.status(parseInt(status)).send({ name: app_name, status: status })
 })
 
 app.get('/name', (req, res) => {
@@ -71,7 +71,7 @@ app.post('/stress', (req, res) => {
             if (message === 'done') {
                 completed++;
                 if (completed === numCores) {
-                    res.send('CPU stress test completed.');
+                    console.log('CPU stress test completed.');
                 }
             }
         });

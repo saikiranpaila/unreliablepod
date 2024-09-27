@@ -30,7 +30,7 @@ for (let i = 1; i <= 9; i++) {
 
 function stress() {
     let cores = document.getElementById('cores').value;
-    let duration = document.getElementById('stress-duration').value;
+    let duration = document.getElementById('stress-duration').value || 10;
     fetch('/stress', {
         method: 'POST',
         headers: {
@@ -40,12 +40,15 @@ function stress() {
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
-            return res.json();
+            return res.text();
         } else {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-    }).catch(err => { })
+        const stressOut = `Stressing ${cores || 'all'} cores for ${duration} seconds.`
+        const stresscontent=document.getElementById('stress-output');
+        stresscontent.textContent=stressOut;
+    }).catch(err => { console.log(err) })
 }
 
 function setHealth() {
