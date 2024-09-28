@@ -50,7 +50,9 @@ app.post('/freeze', (req, res) => {
 
 app.post('/close', (req, res) => {
     res.send("closing...")
-    setTimeout(stopServer, req.body.after * 1000);
+    setTimeout(()=>{
+        stopServer(req.body.exitCode||0)
+    }, req.body.after * 1000);
 });
 
 // Handle CPU stress request
@@ -176,11 +178,12 @@ const server = app.listen(port, () => {
     console.log(`App listening on port ${port}`)
 });
 
-function stopServer() {
+function stopServer(exitCode) {
     for (worker of workers) {
         worker.terminate()
     }
     server.close(() => {
-        console.log('Server stopped.');
+        console.log(`Server stopped with ${exitCode} exit code`);
+        process.exit(parseInt(exitCode));
     });
 };

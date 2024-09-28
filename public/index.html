@@ -113,6 +113,7 @@
         <dialog id="dialog-4">
             <h3>Shutdown the Pod</h3>
             <input type="number" placeholder="Shutdown after (seconds)" min="0" id="shutdown-after">
+            <input type="number" placeholder="Exit Code (Default: 0)" min="0" id="exit-code">
             <button type="submit" onclick="shutdown()">Shutdown</button>
             <h3 id="shutdown-output"></h3>
         </dialog>

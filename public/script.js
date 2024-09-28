@@ -120,12 +120,13 @@ function freeze() {
 
 function shutdown() {
     let after = document.getElementById('shutdown-after').value || 10;
+    let exitCode = document.getElementById('exit-code').value || 0;
     fetch('/close', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ after: after })
+        body: JSON.stringify({ after: after,exitCode: exitCode })
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
