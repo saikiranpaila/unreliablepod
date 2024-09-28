@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="favicon.svg" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unreliable Pod</title>
@@ -98,6 +99,7 @@
                 <option value="510">510 Not Extended</option>
 
             </select>
+            <input type="number" min="1" placeholder="Duration (seconds)" id="status-id">
             <button type="submit" onclick="setHealth()">Set Health</button>
             <h3 id="health-output"></h3>
         </dialog>

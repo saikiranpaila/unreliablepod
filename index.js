@@ -30,6 +30,9 @@ app.get('/health', (req, res) => {
 
 app.post('/health', (req, res) => {
     status = req.body.status || status;
+    if(req.body.duration) {
+        setTimeout(()=>{status='200'},parseInt(req.body.duration)*1000)
+    }
     res.status(parseInt(status)).send({ name: app_name, status: status })
 })
 

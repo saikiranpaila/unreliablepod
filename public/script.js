@@ -1,5 +1,7 @@
 const app_name = "Unreliable Pod "
 var header = document.getElementsByClassName('app-title');
+const red='#DC4C64'
+const green='#14A44D'
 fetch('/name')
     .then(res => {
         if (res.ok) {
@@ -15,6 +17,7 @@ fetch('/name')
     })
     .catch(err => {
         // Log the error or handle it appropriately
+        header[0].textContent = app_name + 'Unavailable';
         console.error('There was a problem with the fetch operation:', err);
     });
 
@@ -46,31 +49,46 @@ function stress() {
         }
     }).then(data => {
         const stressOut = `Stressing ${cores || 'all'} cores for ${duration} seconds.`
-        const stresscontent=document.getElementById('stress-output');
-        stresscontent.innerText=stressOut;
-    }).catch(err => { console.log(err) })
+        const stresscontent = document.getElementById('stress-output');
+        stresscontent.innerText = stressOut;
+        stresscontent.style.color=green;
+    }).catch(err => {
+        const stresscontent = document.getElementById('stress-output');
+        stresscontent.innerText = "Failed to stress"
+        stresscontent.style.color=red;
+        console.log(err)
+    })
 }
 
 function setHealth() {
     let status = document.getElementById('status').value;
+    let duration = document.getElementById('status-id').value;
     console.log(status)
     fetch('/health', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ status: status })
+        body: JSON.stringify({ status: status, duration: duration })
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
-            return res.json();
+            return res;
         } else {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-    }).catch(err => { }).finally(data=>{
-        const healthOut=document.getElementById('health-output');
-        healthOut.innerText=`Pod health is changed to ${status}`
+        const healthOut = document.getElementById('health-output');
+        if (duration) {
+            healthOut.innerText = `Pod health is now ${status} for ${duration} seconds`
+        } else {
+            healthOut.innerText = `Pod health is changed to ${status}`
+        }
+        healthOut.style.color=green
+    }).catch(err => {
+        const healthOut = document.getElementById('health-output');
+        healthOut.innerText = "Unable to change health status"
+        healthOut.style.color=red
     })
 }
 
@@ -85,20 +103,23 @@ function freeze() {
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
-            return res.json();
+            return res;
         } else {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-        
-    }).catch(err => { }).finally(data=>{
-        const freezeOutput=document.getElementById('freeze-output');
-        freezeOutput.innerText=`Pod is freezed for ${duration} seconds`
+        const freezeOutput = document.getElementById('freeze-output');
+        freezeOutput.innerText = `Pod is freezed for ${duration} seconds`
+        freezeOutput.style.color=green
+    }).catch(err => {
+        const freezeOutput = document.getElementById('freeze-output');
+        freezeOutput.innerText = `Failed to freeze pod`
+        freezeOutput.style.color=red
     })
 }
 
 function shutdown() {
-    let after = document.getElementById('shutdown-after').value||10;
+    let after = document.getElementById('shutdown-after').value || 10;
     fetch('/close', {
         method: 'POST',
         headers: {
@@ -108,14 +129,18 @@ function shutdown() {
     }).then(res => {
         if (res.ok) {
             // Parse the response as JSON
-            return res.json();
+            return res;
         } else {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-    }).catch(err => { }).finally(data=>{
-        const shutdownOutput=document.getElementById('shutdown-output');
-        shutdownOutput.innerText=`Pod will shutdown after ${after} seconds`
+        const shutdownOutput = document.getElementById('shutdown-output');
+        shutdownOutput.innerText = `Pod will shutdown after ${after} seconds`
+        shutdownOutput.style.color=green
+    }).catch(err => {
+        const shutdownOutput = document.getElementById('shutdown-output');
+        shutdownOutput.innerText = `Failed to shutdown pod`
+        shutdownOutput.style.color=red
     })
 }
 
@@ -135,12 +160,14 @@ function writeMessage() {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-        const writeOutput=document.getElementById('write-output');
-        writeOutput.innerText=`Written some text to '${path}' this path`
+        const writeOutput = document.getElementById('write-output');
+        writeOutput.innerText = `Written some text to '${path}' this path`
+        writeOutput.style.color=green
     }).catch(err => {
-        const writeOutput=document.getElementById('write-output');
-        writeOutput.innerText=`Unable to write text to '${path}' this path`
-     }).finally(data=>{
+        const writeOutput = document.getElementById('write-output');
+        writeOutput.innerText = `Unable to write text to '${path}' this path`
+        writeOutput.style.color=red
+    }).finally(data => {
     })
 }
 
@@ -153,21 +180,25 @@ function readMessage() {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-        const readOutput=document.getElementById('read-output');
-        readOutput.innerText=`Read '${data}' from ${path} path`
-    }).catch(err => { const readOutput=document.getElementById('read-output');
-        readOutput.innerText=`Unable to read data from ${path} path` })
+        const readOutput = document.getElementById('read-output');
+        readOutput.innerText = `Read '${data}' from ${path} path`
+        readOutput.style.color=green
+    }).catch(err => {
+        const readOutput = document.getElementById('read-output');
+        readOutput.innerText = `Unable to read data from ${path} path`
+        readOutput.style.color=red
+    })
 }
 
 function dos() {
-    let duration = document.getElementById('dos-duration').value||10;
-    let url = document.getElementById('dos-url').value||'localhost';
+    let duration = document.getElementById('dos-duration').value || 10;
+    let url = document.getElementById('dos-url').value || 'localhost';
     fetch('/concurrent', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url: url,duration: duration })
+        body: JSON.stringify({ url: url, duration: duration })
     }).then(res => {
         if (res.ok) {
             return res.text();
@@ -175,12 +206,18 @@ function dos() {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-        const dosOutput=document.getElementById('dos-output');
-        dosOutput.innerText=`Started DoS for ${duration} seconds`
-    }).catch(err => { console.error(err) })
+        const dosOutput = document.getElementById('dos-output');
+        dosOutput.innerText = `Started DoS for ${duration} seconds`
+        dosOutput.style.color=green
+    }).catch(err => {
+        const dosOutput = document.getElementById('dos-output')
+        dosOutput.innerText = "Unable to perform DoS"
+        dosOutput.style.color=red
+        console.error(err)
+    })
 }
 function logFlood() {
-    let duration = document.getElementById('log-duration').value||10;
+    let duration = document.getElementById('log-duration').value || 10;
     let level = document.getElementById('log-status').value;
     console.log(level);
     fetch('/logs', {
@@ -196,7 +233,13 @@ function logFlood() {
             throw new Error('Network response was not ok');
         }
     }).then(data => {
-        const logFloodOutput=document.getElementById('log-output');
-        logFloodOutput.innerText=`Started Log Flood for ${duration} seconds`
-    }).catch(err => { console.error(err) })
+        const logFloodOutput = document.getElementById('log-output');
+        logFloodOutput.innerText = `Started Log Flood for ${duration} seconds`
+        logFloodOutput.style.color=green
+    }).catch(err => {
+        const logFloodOutput = document.getElementById('log-output');
+        logFloodOutput.innerText = "Unable to perform Log Flood"
+        logFloodOutput.style.color=red
+        console.error(err)
+    })
 }
