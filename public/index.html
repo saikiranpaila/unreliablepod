@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="favicon.svg" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unreliable Pod</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="app-title">Unreliable Pod</h1>
+    </div>
+    <div class="main">
+        <div class="box" id="box-1">Stress</div>
+        <div class="box" id="box-2">Health</div>
+        <div class="box" id="box-3">Freeze</div>
+        <div class="box" id="box-4">Shutdown</div>
+        <div class="box" id="box-5">Write</div>
+        <div class="box" id="box-6">Read</div>
+        <!-- <div class="box" id="box-7">Discover</div> -->
+        <div class="box" id="box-8">DoS</div>
+        <div class="box" id="box-9">Log Flood</div>
+        <!-- <div class="box" id="box-10">Ongoing</div> -->
+        <dialog id="dialog-1">
+            <h3>Stress the Pod resources.</h3>
+            <input type="number" min="1" placeholder="cores (Default: all)" id="cores">
+            <input type="number" min="2" placeholder="duration (seconds)" id="stress-duration">
+            <button type="submit" onclick="stress()">Stress</button>
+            <h3 id="stress-output"></h3>
+        </dialog>
+        <dialog id="dialog-2">
+            <h3>Change Health Status of Pod</h3>
+            <select name="status" id="status">
+                <option value="" disabled selected>Select a Status Code</option>
+                <option value="100">100 Continue</option>
+                <option value="101">101 Switching Protocols</option>
+                <option value="102">102 Processing</option>
+
+                <option value="200">200 OK</option>
+                <option value="201">201 Created</option>
+                <option value="202">202 Accepted</option>
+                <option value="203">203 Non-Authoritative Information</option>
+                <option value="204">204 No Content</option>
+                <option value="205">205 Reset Content</option>
+                <option value="206">206 Partial Content</option>
+
+                <option value="300">300 Multiple Choices</option>
+                <option value="301">301 Moved Permanently</option>
+                <option value="302">302 Found</option>
+                <option value="303">303 See Other</option>
+                <option value="304">304 Not Modified</option>
+                <option value="305">305 Use Proxy</option>
+                <option value="307">307 Temporary Redirect</option>
+                <option value="308">308 Permanent Redirect</option>
+
+                <option value="400">400 Bad Request</option>
+                <option value="401">401 Unauthorized</option>
+                <option value="402">402 Payment Required</option>
+                <option value="403">403 Forbidden</option>
+                <option value="404">404 Not Found</option>
+                <option value="405">405 Method Not Allowed</option>
+                <option value="406">406 Not Acceptable</option>
+                <option value="407">407 Proxy Authentication Required</option>
+                <option value="408">408 Request Timeout</option>
+                <option value="409">409 Conflict</option>
+                <option value="410">410 Gone</option>
+                <option value="411">411 Length Required</option>
+                <option value="412">412 Precondition Failed</option>
+                <option value="413">413 Payload Too Large</option>
+                <option value="414">414 URI Too Long</option>
+                <option value="415">415 Unsupported Media Type</option>
+                <option value="416">416 Range Not Satisfiable</option>
+                <option value="417">417 Expectation Failed</option>
+                <option value="418">418 I'm a teapot</option>
+                <option value="421">421 Misdirected Request</option>
+                <option value="422">422 Unprocessable Entity</option>
+                <option value="423">423 Locked</option>
+                <option value="424">424 Failed Dependency</option>
+                <option value="425">425 Too Early</option>
+                <option value="426">426 Upgrade Required</option>
+                <option value="427">427 Unassigned</option>
+                <option value="428">428 Precondition Required</option>
+                <option value="429">429 Too Many Requests</option>
+                <option value="431">431 Request Header Fields Too Large</option>
+                <option value="451">451 Unavailable For Legal Reasons</option>
+
+                <option value="500">500 Internal Server Error</option>
+                <option value="501">501 Not Implemented</option>
+                <option value="502">502 Bad Gateway</option>
+                <option value="503">503 Service Unavailable</option>
+                <option value="504">504 Gateway Timeout</option>
+                <option value="505">505 HTTP Version Not Supported</option>
+                <option value="506">506 Variant Also Negotiates</option>
+                <option value="507">507 Insufficient Storage</option>
+                <option value="508">508 Loop Detected</option>
+                <option value="510">510 Not Extended</option>
+
+            </select>
+            <input type="number" min="1" placeholder="Duration (seconds)" id="status-id">
+            <button type="submit" onclick="setHealth()">Set Health</button>
+            <h3 id="health-output"></h3>
+        </dialog>
+        <dialog id="dialog-3">
+            <h3>Warning Freezing the pod will cause unresponsive behaviour.</h3>
+            <h5>Choose a small duration time.</h5>
+            <input type="number" min="2" placeholder="duration (seconds)" id="freeze-duration">
+            <button type="submit" onclick="freeze()">Freeze</button>
+            <h3 id="freeze-output"></h3>
+        </dialog>
+        <dialog id="dialog-4">
+            <h3>Shutdown the Pod</h3>
+            <input type="number" placeholder="Shutdown after (seconds)" min="0" id="shutdown-after">
+            <input type="number" placeholder="Exit Code (Default: 0)" min="0" id="exit-code">
+            <button type="submit" onclick="shutdown()">Shutdown</button>
+            <h3 id="shutdown-output"></h3>
+        </dialog>
+        <dialog id="dialog-5">
+            <h3>Write some message to next pod.</h3>
+            <input type="text" placeholder="directory (Default: /tmp)" id="write-directory">
+            <button type="submit" onclick="writeMessage()">Write</button>
+            <h3 id="write-output"></h3>
+        </dialog>
+        <dialog id="dialog-6">
+            <h3>Read message from previous pod.</h3>
+            <input type="text" placeholder="directory (Default: /tmp)" id="read-directory">
+            <button type="submit" onclick="readMessage()">Read</button>
+            <h3 id="read-output"></h3>
+        </dialog>
+        <dialog id="dialog-7">
+            <h3>Discover other pods like this.</h3>
+            <input type="text" placeholder="url (LB/service/localhost)">
+            <input type="number" min="5" placeholder="duration (seconds)">
+            <button type="submit" onclick="">Discover</button>
+            <h3 id="discover-output"></h3>
+        </dialog>
+        <dialog id="dialog-8">
+            <h3>Flood the pod(s) by sending concurrent requests.</h3>
+            <input type="text" placeholder="url (Default: localhost)" id="dos-url">
+            <input type="number" min="2" placeholder="duration (seconds)" id="dos-duration">
+            <button type="submit" onclick="dos()">Start</button>
+            <h3 id="dos-output"></h3>
+        </dialog>
+        <dialog id="dialog-9">
+            <h3>Flood the pod(s) by generating Logs.</h3>
+            <select name="log-status" id="log-status">
+                <option value="" disabled selected>Select a Log Level (Default: Random) </option>
+                <option value="1">Log</option>
+                <option value="2">Debug</option>
+                <option value="3">Warn</option>
+                <option value="4">Error</option>
+                <option value="">Random</option>
+            </select>
+            <input type="number" min="2" placeholder="duration (seconds)" id="log-duration">
+            <button type="submit" onclick="logFlood()">Start</button>
+            <h3 id="log-output"></h3>
+        </dialog>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+</html>
