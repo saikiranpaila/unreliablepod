@@ -33,7 +33,7 @@ app.post('/health', (req, res) => {
     if(req.body.duration) {
         setTimeout(()=>{status='200'},parseInt(req.body.duration)*1000)
     }
-    res.status(parseInt(status)).send({ name: app_name, status: status })
+    res.send({ name: app_name, status: status })
 })
 
 app.get('/name', (req, res) => {

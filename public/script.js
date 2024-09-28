@@ -93,7 +93,7 @@ function setHealth() {
 }
 
 function freeze() {
-    let duration = document.getElementById('freeze-duration').value;
+    let duration = document.getElementById('freeze-duration').value||10;
     fetch('/freeze', {
         method: 'POST',
         headers: {
