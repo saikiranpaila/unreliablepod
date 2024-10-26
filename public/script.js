@@ -2,7 +2,7 @@ const app_name = "Unreliable Pod "
 var header = document.getElementsByClassName('app-title');
 const red='#DC4C64'
 const green='#14A44D'
-fetch('/name')
+fetch('name')
     .then(res => {
         if (res.ok) {
             // Parse the response as JSON
@@ -34,7 +34,7 @@ for (let i = 1; i <= 9; i++) {
 function stress() {
     let cores = document.getElementById('cores').value;
     let duration = document.getElementById('stress-duration').value || 10;
-    fetch('/stress', {
+    fetch('stress', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ function setHealth() {
     let status = document.getElementById('status').value;
     let duration = document.getElementById('status-id').value;
     console.log(status)
-    fetch('/health', {
+    fetch('health', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ function setHealth() {
 
 function freeze() {
     let duration = document.getElementById('freeze-duration').value||10;
-    fetch('/freeze', {
+    fetch('freeze', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -121,7 +121,7 @@ function freeze() {
 function shutdown() {
     let after = document.getElementById('shutdown-after').value || 10;
     let exitCode = document.getElementById('exit-code').value || 0;
-    fetch('/close', {
+    fetch('close', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ function shutdown() {
 
 function writeMessage() {
     let path = document.getElementById('write-directory').value || '/tmp';
-    fetch('/write', {
+    fetch('write', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ function writeMessage() {
 
 function readMessage() {
     let path = document.getElementById('read-directory').value || '/tmp';
-    fetch(`/read?path=${path}`).then(res => {
+    fetch(`read?path=${path}`).then(res => {
         if (res.ok) {
             return res.text();
         } else {
@@ -194,7 +194,7 @@ function readMessage() {
 function dos() {
     let duration = document.getElementById('dos-duration').value || 10;
     let url = document.getElementById('dos-url').value || 'localhost';
-    fetch('/concurrent', {
+    fetch('concurrent', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -221,7 +221,7 @@ function logFlood() {
     let duration = document.getElementById('log-duration').value || 10;
     let level = document.getElementById('log-status').value;
     console.log(level);
-    fetch('/logs', {
+    fetch('logs', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
